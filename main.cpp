@@ -1,7 +1,4 @@
 #include <iostream>
-#include <string>
-#include <fstream>
-#include <sstream>
 #include "passwordCheck.h"
 
 using namespace std;
@@ -57,7 +54,14 @@ int main(){
 	if(choice == '1')
 	{
 		string username, password;
+		
 		cout <<	"select an username: "; cin >> username;
+		bool userAlreadyExist = usernameExists(username);
+		while (userAlreadyExist) {
+			cout <<	"\nusername already exists. Try anotherone: "; cin >> username;
+			userAlreadyExist = usernameExists(username);
+		}
+		
 		cout <<	"select a password: "; cin >> password;
 		bool passwordVerified = mainPasswordCheck(password);
 		while (!passwordVerified) {
@@ -65,8 +69,6 @@ int main(){
 			passwordVerified = mainPasswordCheck(password);
 				
 		}
-		
-		//check username
 		
 		writeOnFile(username, password);
 		cout << "Registration was succesfull.\n";
@@ -98,6 +100,6 @@ int main(){
 		cout << "non valid option";
 		return 1;
 	}
-  
+
 	return 0;
 }
