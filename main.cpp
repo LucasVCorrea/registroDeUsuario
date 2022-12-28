@@ -12,7 +12,7 @@ void writeOnFile(string usernameToFile, string passwordToFile){
 }
 
 bool isLoggedIn(string username, string password){
-	
+	int currentLine = 0;
 	string	line = "";
 	ifstream read("REGISTER_FILES.txt");
 	string usernameOnFile, passwordOnFile;
@@ -20,11 +20,11 @@ bool isLoggedIn(string username, string password){
 	while (getline(read, line)) {
 		bool userFind = false;
 		bool passFind = false;
-		
+		currentLine++;
 		stringstream inputString(line);
 		getline(inputString, usernameOnFile,'-');
 		getline(inputString, passwordOnFile,' ');
-		
+		//cout << line << endl;
 		if((username == usernameOnFile)){	
 			userFind = true;
 
@@ -41,6 +41,7 @@ bool isLoggedIn(string username, string password){
 		
 		line = "";
 	}
+	cout << currentLine << endl;
 	read.close();
 	return false;
 }
@@ -71,6 +72,7 @@ int main(){
 		}
 		
 		writeOnFile(username, password);
+		//borrar la hora y el dia viejos
 		cout << "Registration was succesfull.\n";
 		main();
 	}
@@ -88,12 +90,32 @@ int main(){
 		}
 		
 		else{
-			cout << "\nYou are logged in.\n";
+			char userChoice;
+			string newPassword;
+			cout << "\nYou are logged in.\n==================" << endl;
+			cout << "*1 - change password\n*2 - Exit" << endl << "==================" << endl;
+			cout << "Your choice: "; cin >> userChoice;
+			if (userChoice == '1'){
+				cout << "select new password: "; cin >> newPassword;
+				bool passwordVerified = mainPasswordCheck(newPassword);
+				while (!passwordVerified) {
+					cout <<	"\nselect another password: "; cin >> newPassword;
+					passwordVerified = mainPasswordCheck(newPassword);
+				}
+				changePassword(usernameLogged, newPassword);
+				cout << "password succesfully changed" << endl;
+			}
+			
+			else if(userChoice == '2'){
+				cout << "chau" << endl;
+			}
 		}
+		main();
 	}
 	
 	else if(choice == '3'){
 		cout << "logged out successfully";
+	//	writeTime();
 	}
 	
 	else{
